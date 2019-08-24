@@ -1,4 +1,5 @@
 import * as React from "react"
+import * as webpack from "webpack"
 import { EventEmitter } from "events"
 import { WindowLocation } from "@reach/router"
 import { createContentDigest } from "gatsby-core-utils"
@@ -667,7 +668,7 @@ export interface CreatePageArgs extends ParentSpanPluginArgs {
 }
 
 export interface CreateWebpackConfigArgs extends ParentSpanPluginArgs {
-  getConfig: Function
+  getConfig: () => webpack.Configuration
   stage: GatsbyStages
   rules: WebpackRules
   loaders: WebpackLoaders
@@ -855,10 +856,10 @@ export interface Actions {
   ): void
 
   /** @see https://www.gatsbyjs.org/docs/actions/#setWebpackConfig */
-  setWebpackConfig(config: object, plugin?: ActionPlugin): void
+  setWebpackConfig(config: webpack.Configuration, plugin?: ActionPlugin): void
 
   /** @see https://www.gatsbyjs.org/docs/actions/#replaceWebpackConfig */
-  replaceWebpackConfig(config: object, plugin?: ActionPlugin): void
+  replaceWebpackConfig(config: webpack.Configuration, plugin?: ActionPlugin): void
 
   /** @see https://www.gatsbyjs.org/docs/actions/#setBabelOptions */
   setBabelOptions(options: object, plugin?: ActionPlugin): void
@@ -1041,21 +1042,21 @@ export interface WebpackLoaders {
 }
 
 export interface WebpackPlugins {
-  normalModuleReplacement: Function
-  contextReplacement: Function
-  ignore: Function
-  watchIgnore: Function
-  banner: Function
-  prefetch: Function
-  automaticPrefetch: Function
-  define: Function
-  provide: Function
-  hotModuleReplacement: Function
-  sourceMapDevTool: Function
-  evalSourceMapDevTool: Function
+  normalModuleReplacement: () => webpack.NormalModuleReplacementPlugin
+  contextReplacement: () => webpack.ContextReplacementPlugin
+  ignore: () => webpack.IgnorePlugin
+  watchIgnore: () => webpack.WatchIgnorePlugin
+  banner: () => webpack.BannerPlugin
+  prefetch: () => webpack.PrefetchPlugin
+  automaticPrefetch: () => webpack.PrefetchPlugin
+  define: () => webpack.DefinePlugin
+  provide: () => webpack.ProvidePlugin
+  hotModuleReplacement: () => webpack.HotModuleReplacementPlugin
+  sourceMapDevTool: () => webpack.SourceMapDevToolPlugin
+  evalSourceMapDevTool: () => webpack.EvalSourceMapDevToolPlugin
   evalDevToolModule: Function
   cache: Function
-  extendedAPI: Function
+  extendedAPI: () => webpack.ExtendedAPIPlugin
   externals: Function
   jsonpTemplate: Function
   libraryTemplate: Function
